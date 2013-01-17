@@ -1,0 +1,19 @@
+<%= form_tag sessions_path do %>
+  <fieldset>
+    <legend>Login</legend>
+    
+    <%= label_tag :email %>
+    <%= text_field_tag :email, nil, autofocus: "autofocus" %>
+  
+    <%= label_tag :password %>
+    <%= password_field_tag :password %>
+    
+    <label class="checkbox">
+      <%= check_box_tag :remember %> Remember Me
+    </label>
+  </fieldset>
+  
+  <div class="form-actions">
+    <%= submit_tag "Login", class: "btn", id: "btn-login" %>
+  </div>
+<% end %>

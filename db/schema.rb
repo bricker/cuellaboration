@@ -11,29 +11,29 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130116105453) do
+ActiveRecord::Schema.define(:version => 20130117044328) do
 
   create_table "collaborators", :force => true do |t|
     t.string   "name"
     t.string   "email"
-    t.string   "encrypted_password"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.string   "password_digest"
+    t.boolean  "active",          :default => true
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
   end
+
+  add_index "collaborators", ["active", "email"], :name => "index_collaborators_on_active_and_email"
 
   create_table "cues", :force => true do |t|
     t.integer  "project_id"
     t.string   "title"
-    t.integer  "cue_number"
-    t.boolean  "approved"
-    t.boolean  "finalized"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "number"
+    t.boolean  "approved",   :default => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
-  add_index "cues", ["approved"], :name => "index_cues_on_approved"
-  add_index "cues", ["cue_number"], :name => "index_cues_on_cue_number"
-  add_index "cues", ["finalized"], :name => "index_cues_on_finalized"
+  add_index "cues", ["number"], :name => "index_cues_on_number"
   add_index "cues", ["project_id"], :name => "index_cues_on_project_id"
 
   create_table "notes", :force => true do |t|
@@ -48,6 +48,14 @@ ActiveRecord::Schema.define(:version => 20130116105453) do
   add_index "notes", ["collaborator_id"], :name => "index_notes_on_collaborator_id"
   add_index "notes", ["notable_type", "notable_id"], :name => "index_notes_on_notable_type_and_notable_id"
 
+  create_table "project_collaborators", :force => true do |t|
+    t.integer "project_id"
+    t.integer "collaborator_id"
+  end
+
+  add_index "project_collaborators", ["collaborator_id"], :name => "index_project_collaborators_on_collaborator_id"
+  add_index "project_collaborators", ["project_id"], :name => "index_project_collaborators_on_project_id"
+
   create_table "projects", :force => true do |t|
     t.string   "title"
     t.string   "media_location"
@@ -57,14 +65,15 @@ ActiveRecord::Schema.define(:version => 20130116105453) do
 
   create_table "versions", :force => true do |t|
     t.integer  "cue_id"
-    t.integer  "version_number"
+    t.integer  "number"
     t.string   "media_file"
     t.datetime "delivered_at"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.boolean  "finalized",    :default => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   add_index "versions", ["cue_id"], :name => "index_versions_on_cue_id"
-  add_index "versions", ["version_number"], :name => "index_versions_on_version_number"
+  add_index "versions", ["number"], :name => "index_versions_on_number"
 
 end

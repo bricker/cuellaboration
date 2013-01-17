@@ -1,14 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 <head>
   <title>Cuellaboration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
+  <div class="container-fluid">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <a class="brand" href="<%=root_path%>">Cuellaboration</a>
+        <ul class="nav">
+          <% if current_user %>
+            <li><a href="<%=projects_path%>">Projects</a></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container-fluid">
+    <% flash.select { |_, v| v.is_a? String }.each do |name, msg| %>
+      <div class="alert alert-<%= flash_alert_type(name) %>">
+        <a class="close" data-dismiss="alert">&times;</a>
+        <%= msg.html_safe %>
+      </div>
+    <% end %>
+      
+    <%= yield %>
+  </div>
+  
+  <div class="container-fluid">
+    <hr />
+  </div>
 
 </body>
 </html>
